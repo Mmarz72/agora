@@ -1,0 +1,29 @@
+---
+import { site, url } from '../site';
+---
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__open">{site.openToAll}</p>
+    <ul>
+      <li><a href={url('/constitution')}>Constitution</a></li>
+      {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
+    </ul>
+    <p class="footer__small">
+      Photograph of Nassau Hall by{' '}
+      <a href="https://commons.wikimedia.org/wiki/File:Nassau_Hall_Princeton_Uni.JPG">Rohit Hirway</a>,{' '}
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--rule); margin-top: clamp(64px, 10vw, 128px); }
+  .footer__inner {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px 32px;
+    padding-top: 28px; padding-bottom: 32px; font-size: 0.9375rem;
+  }
+  .footer__open { margin: 0; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 24px; }
+  .footer__small { grid-column: 1 / -1; margin: 12px 0 0; font-size: 0.8125rem; color: var(--stone); }
+  @media (max-width: 600px) { .footer__inner { grid-template-columns: 1fr; } }
+</style>

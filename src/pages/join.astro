@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site';
+
+// Until there's a real mailing list, sign-ups come through the petition form's checkbox.
+const { petition } = site;
+const viaPetition = !site.mailingListUrl && petition.active && petition.formUrl;
+---
+<Base title="Join" description="Join Agora. No dues, no application.">
+  <div class="wrap">
+    <h1 class="page-title">Join</h1>
+    {viaPetition ? (
+      <>
+        <p class="intro">
+          Agora is just getting started. Sign the petition and tick the mailing-list box, and you’ll hear about the
+          first session. No dues, no application, nothing to buy.
+        </p>
+        <a class="button" href={petition.formUrl}>Sign the petition</a>
+      </>
+    ) : site.mailingListUrl ? (
+      <>
+        <p class="intro">Get on the mailing list and you’re a member. No dues, no application, nothing to buy.</p>
+        <a class="button" href={site.mailingListUrl}>Join the mailing list</a>
+      </>
+    ) : (
+      <p class="intro">Come to any Sunday session and you’re a member. No dues, no application, nothing to buy.</p>
+    )}
+
+    <dl class="facts">
+      <div><dt>When</dt><dd>{site.meeting.day}, {site.meeting.time.toLowerCase()}, during term</dd></div>
+      <div><dt>Where</dt><dd>{site.meeting.place}</dd></div>
+      <div><dt>Readings</dt><dd>Sent out by Wednesday, free</dd></div>
+      <div><dt>Who</dt><dd>Any Princeton undergraduate. Graduate students and faculty by invitation.</dd></div>
+    </dl>
+  </div>
+</Base>
+
+<style>
+  .intro { margin-bottom: 28px; }
+  .facts { margin: clamp(48px, 7vw, 80px) 0 0; border-top: 2px solid var(--orange); max-width: 52rem; }
+  .facts div { display: grid; grid-template-columns: 14rem 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  dt { color: var(--stone); }
+  dd { margin: 0; }
+  @media (max-width: 560px) { .facts div { grid-template-columns: 1fr; gap: 2px; } }
+</style>

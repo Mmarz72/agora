@@ -1,0 +1,51 @@
+---
+import { site, nav, url } from '../site';
+interface Props { overlay?: boolean }
+const { overlay = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '');
+---
+{site.draft && <div class="draft">Draft. Some details are placeholders.</div>}
+<header class:list={['header', { 'header--overlay': overlay }]}>
+  <div class="wrap header__inner">
+    <a href={url('/')} class="brand">Agora</a>
+    <nav aria-label="Main">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .draft {
+    background: var(--wash);
+    color: var(--stone);
+    font-size: 0.8125rem;
+    height: var(--draft-h);
+    line-height: var(--draft-h);
+    padding: 0 var(--gutter);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .header { border-bottom: 1px solid var(--rule); }
+  .header--overlay {
+    position: absolute; left: 0; right: 0; z-index: 10;
+    border-bottom: 0; color: var(--paper);
+  }
+  .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; }
+  .brand { font-family: var(--display); font-size: 1.75rem; line-height: 1; text-decoration: none; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: clamp(16px, 3vw, 36px); }
+  nav a { text-decoration: none; font-size: 1.0625rem; }
+  nav a:hover, nav a[aria-current='page'] {
+    text-decoration: underline; text-underline-offset: 0.4em;
+    text-decoration-thickness: 2px; text-decoration-color: var(--orange);
+  }
+
+  @media (max-width: 480px) {
+    .header__inner { flex-direction: column; align-items: flex-start; gap: 4px; padding-top: 14px; padding-bottom: 14px; }
+    ul { gap: 4px 20px; flex-wrap: wrap; }
+  }
+</style>

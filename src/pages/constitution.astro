@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { Content, getHeadings } from '../content/constitution.md';
+
+const headings = getHeadings().filter((h) => h.depth === 2);
+---
+<Base title="Constitution" description="The constitution of Agora, a weekly reading and discussion society at Princeton University.">
+  <div class="wrap">
+    <h1 class="page-title">Constitution</h1>
+    <div class="layout">
+      <nav class="toc" aria-label="Articles">
+        <ol>
+          {headings.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+      </nav>
+      <article class="doc">
+        <Content />
+      </article>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .layout { display: grid; grid-template-columns: 15rem 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; margin-top: 16px; }
+  .toc { position: sticky; top: 24px; font-size: 0.9375rem; }
+  .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc a { display: block; padding: 5px 0; text-decoration: none; color: var(--stone); }
+  .toc a:hover { color: var(--shade); text-decoration: underline; }
+
+  .doc { max-width: 38rem; font-size: 1.125rem; line-height: 1.65; }
+  .doc :global(h2) {
+    font-family: var(--display); font-size: 2.25rem; line-height: 1.1;
+    margin: 64px 0 20px; scroll-margin-top: 24px;
+  }
+  .doc :global(h2:first-child) { margin-top: 0; }
+  .doc :global(p strong) { font-weight: 700; margin-right: 2px; }
+  .doc :global(ol) { padding-left: 1.5em; margin: 0 0 1.2em; }
+  .doc :global(li) { margin-bottom: 0.6em; }
+  .doc :global(li::marker) { color: var(--stone); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .toc { position: static; border-bottom: 1px solid var(--rule); padding-bottom: 16px; }
+  }
+</style>

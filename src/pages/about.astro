@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../site';
+---
+<Base title="About">
+  <div class="wrap">
+    <h1 class="page-title">About</h1>
+    <div class="prose">
+      <p class="intro">
+        Agora is a place to discuss the state of the world. People get so locked into one field that they lose
+        their outlet to talk about what’s happening in the others. This is that outlet.
+      </p>
+
+      <h2>A Sunday</h2>
+      <ol>
+        <li>We start with the week’s news.</li>
+        <li>Someone presents the reading everyone did beforehand and gives their take.</li>
+        <li>We talk it out, over good food.</li>
+      </ol>
+      <p>Readings take about ninety minutes and are always free. You leave up to date, knowing a little more about fields you don’t study, and knowing more people.</p>
+
+      <h2>Ground rules</h2>
+      <ul>
+        <li>Argue with ideas, not people.</li>
+        <li>State the strongest version of a view before you criticize it.</li>
+        <li>What’s said in a session stays there.</li>
+      </ul>
+
+      <h2>No side taken</h2>
+      <p>Agora takes no position on political, religious or ideological questions. It hosts the argument; it doesn’t settle it.</p>
+
+      <p class="name">
+        The name comes from the public square of ancient Athens, where citizens met to argue about the questions of
+        the day.
+      </p>
+
+      <p><a href={url('/constitution')}>Read the constitution</a></p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .prose { max-width: 36rem; }
+  .intro { margin-bottom: 48px; }
+  h2 { font-size: 1.125rem; font-weight: 700; margin: 40px 0 12px; }
+  ol, ul { margin: 0 0 1em; padding-left: 1.25em; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--stone); }
+  .name { color: var(--stone); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); }
+</style>
