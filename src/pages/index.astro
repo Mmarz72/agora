@@ -83,7 +83,9 @@ import { thisWeek, formatDate } from '../data/schedule';
     display: flex; flex-direction: column; justify-content: flex-end;
     padding-bottom: clamp(20px, 3vw, 40px);
   }
-  .hero__text { order: -1; max-width: 26rem; margin-bottom: clamp(16px, 3vw, 32px); }
+  /* The text and button sit above the big word: its tall letters reach up behind them,
+     and the word is drawn after them, so without this it swallows clicks on the button. */
+  .hero__text { order: -1; position: relative; z-index: 1; max-width: 26rem; margin-bottom: clamp(16px, 3vw, 32px); }
   .hero__text p { font-size: clamp(1.0625rem, 1.6vw, 1.25rem); line-height: 1.4; margin-bottom: 20px; }
   .hero__word {
     font-family: var(--display);
@@ -92,6 +94,7 @@ import { thisWeek, formatDate } from '../data/schedule';
     line-height: 0.78;
     margin-left: -0.03em;
     padding-bottom: 0.24em; /* room for the g's descender */
+    pointer-events: none; /* decorative wordmark; never block clicks */
   }
 
   .below {
