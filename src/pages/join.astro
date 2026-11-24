@@ -1,23 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../site';
-
-// Until there's a real mailing list, sign-ups come through the petition form's checkbox.
-const { petition } = site;
-const viaPetition = !site.mailingListUrl && petition.active && petition.formUrl;
 ---
 <Base title="Join" description="Join Agora. No dues, no application.">
   <div class="wrap">
     <h1 class="page-title">Join</h1>
-    {viaPetition ? (
-      <>
-        <p class="intro">
-          Agora is just getting started. Sign the petition and tick the mailing-list box, and you’ll hear about the
-          first session. No dues, no application, nothing to buy.
-        </p>
-        <a class="button" href={petition.formUrl}>Sign the petition</a>
-      </>
-    ) : site.mailingListUrl ? (
+    {site.mailingListUrl ? (
       <>
         <p class="intro">Get on the mailing list and you’re a member. No dues, no application, nothing to buy.</p>
         <a class="button" href={site.mailingListUrl}>Join the mailing list</a>

@@ -5,21 +5,29 @@ import { thisWeek, formatDate } from '../data/schedule';
 ---
 <Base overlayHeader>
   <section class="hero">
-    <img
-      class="hero__photo"
-      src={url('/images/nassau-2200.jpg')}
-      srcset={`${url('/images/nassau-1200.jpg')} 1200w, ${url('/images/nassau-2200.jpg')} 2200w`}
-      sizes="100vw"
-      alt=""
-      fetchpriority="high"
-    />
+    <picture>
+      <!-- AVIF is about half the weight of the JPEG at the same visible quality. -->
+      <source
+        type="image/avif"
+        srcset={`${url('/images/nassau-1200.avif')} 1200w, ${url('/images/nassau-2200.avif')} 2200w`}
+        sizes="100vw"
+      />
+      <img
+        class="hero__photo"
+        src={url('/images/nassau-2200.jpg')}
+        srcset={`${url('/images/nassau-1200.jpg')} 1200w, ${url('/images/nassau-2200.jpg')} 2200w`}
+        sizes="100vw"
+        alt=""
+        fetchpriority="high"
+      />
+    </picture>
     <div class="wrap hero__content">
       <h1 class="hero__word">Agora</h1>
       <div class="hero__text">
         <p>A weekly reading and discussion society at Princeton University. Sundays during term.</p>
-        {site.petition.active
-          ? <a class="button" href={site.petition.formUrl ?? url('/petition')}>Sign the petition</a>
-          : <a class="button" href={site.mailingListUrl ?? url('/join')}>Join the mailing list</a>}
+        {site.mailingListUrl
+          ? <a class="button" href={site.mailingListUrl}>Join the mailing list</a>
+          : <a class="button" href={url('/join')}>How to join</a>}
       </div>
     </div>
   </section>
@@ -45,8 +53,8 @@ import { thisWeek, formatDate } from '../data/schedule';
         <>
           <p class="muted">First reading</p>
           <p class="next__title">To be announced</p>
-          <p class="next__author">We’re gathering signatures to become a recognized club.</p>
-          <a href={url('/petition')}>Help start Agora</a>
+          <p class="next__author">The schedule will be posted on the Readings page.</p>
+          <a href={url('/readings')}>Reading schedule</a>
         </>
       )}
     </div>
@@ -68,12 +76,18 @@ import { thisWeek, formatDate } from '../data/schedule';
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover; object-position: center 45%;
-    filter: saturate(0.85) brightness(0.8);
+    filter: saturate(0.9) brightness(0.92);
     animation: settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
+  /* Shade only where words sit, so the building keeps its dusk light: a band under the
+     nav, a light veil overall, and a deeper fall-off behind the wordmark at the bottom.
+     The tagline carries its own shade (below), since it moves with the layout. */
   .hero::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(20, 24, 28, 0.55) 0%, rgba(20, 24, 28, 0.42) 40%, rgba(20, 24, 28, 0.8) 100%);
+    background:
+      linear-gradient(180deg, rgba(20, 24, 28, 0.68) 0, rgba(20, 24, 28, 0.3) 110px, rgba(20, 24, 28, 0) 210px),
+      linear-gradient(0deg, rgba(20, 24, 28, 0.78) 0%, rgba(20, 24, 28, 0.5) 35%, rgba(20, 24, 28, 0) 68%),
+      rgba(20, 24, 28, 0.12);
   }
   @keyframes settle { from { transform: scale(1.06); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .hero__photo { animation: none; } }
@@ -83,10 +97,27 @@ import { thisWeek, formatDate } from '../data/schedule';
     display: flex; flex-direction: column; justify-content: flex-end;
     padding-bottom: clamp(20px, 3vw, 40px);
   }
-  /* The text and button sit above the big word: its tall letters reach up behind them,
-     and the word is drawn after them, so without this it swallows clicks on the button. */
-  .hero__text { order: -1; position: relative; z-index: 1; max-width: 26rem; margin-bottom: clamp(16px, 3vw, 32px); }
-  .hero__text p { font-size: clamp(1.0625rem, 1.6vw, 1.25rem); line-height: 1.4; margin-bottom: 20px; }
+  /* The big word's tall letters reach up behind the text and button. Being positioned
+     paints the text above the word, and the word ignores the pointer, so the button stays
+     clickable. No z-index here: it would lift the shade pool below over the word too. */
+  .hero__text { order: -1; position: relative; max-width: 26rem; margin-bottom: clamp(16px, 3vw, 32px); }
+  /* A soft pool of shade that travels with the tagline, wherever the photo puts it.
+     Tall rather than flat, with an eased fall-off: a linear fade over a short height
+     left a hard edge across the sky. */
+  .hero__text::before {
+    content: ''; position: absolute; z-index: -1; inset: -150px -240px -130px -260px;
+    background: radial-gradient(closest-side,
+      rgba(20, 24, 28, 0.7) 0%, rgba(20, 24, 28, 0.64) 28%, rgba(20, 24, 28, 0.5) 46%,
+      rgba(20, 24, 28, 0.33) 62%, rgba(20, 24, 28, 0.18) 76%, rgba(20, 24, 28, 0.07) 89%,
+      rgba(20, 24, 28, 0) 100%);
+    pointer-events: none;
+  }
+  .hero__text p {
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem); line-height: 1.4; margin-bottom: 20px;
+    text-shadow: 0 1px 2px rgba(20, 24, 28, 0.45);
+  }
+  /* The button's slate text colour would make a slate focus ring, invisible on the photo. */
+  .hero__text .button:focus-visible { outline-color: var(--paper); }
   .hero__word {
     font-family: var(--display);
     font-size: clamp(7.5rem, 32vw, 28.5rem);
@@ -112,5 +143,12 @@ import { thisWeek, formatDate } from '../data/schedule';
   }
   @media (max-width: 600px) {
     .hero__word { font-size: 41vw; }
+    /* On phones the nav wraps to a second row, lower down over brighter sky. */
+    .hero::after {
+      background:
+        linear-gradient(180deg, rgba(20, 24, 28, 0.72) 0, rgba(20, 24, 28, 0.5) 90px, rgba(20, 24, 28, 0) 220px),
+        linear-gradient(0deg, rgba(20, 24, 28, 0.78) 0%, rgba(20, 24, 28, 0.5) 35%, rgba(20, 24, 28, 0) 68%),
+        rgba(20, 24, 28, 0.12);
+    }
   }
 </style>

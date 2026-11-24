@@ -32,7 +32,8 @@ import { board } from '../data/board';
   }
   .role { color: var(--stone); }
   .name { font-size: 1.5rem; line-height: 1.25; }
-  .name--open { color: var(--stone); }
+  /* Unfilled offices stay quiet so the names that exist carry the page. */
+  .name--open { color: var(--stone); font-size: inherit; font-style: italic; }
   .note { display: block; font-size: 0.9375rem; color: var(--stone); }
   .after { margin-top: 32px; max-width: 36rem; }
   @media (max-width: 560px) {

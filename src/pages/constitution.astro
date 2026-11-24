@@ -20,12 +20,42 @@ const headings = getHeadings().filter((h) => h.depth === 2);
   </div>
 </Base>
 
+<script>
+  // Marks the article being read in the contents list.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+  const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+  let queued = false;
+
+  function mark() {
+    queued = false;
+    const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current = 0;
+    heads.forEach((h, i) => {
+      if (h && h.getBoundingClientRect().top <= 120) current = i;
+    });
+    if (atEnd) current = heads.length - 1;
+    links.forEach((a, i) => {
+      if (i === current) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
+    });
+  }
+
+  addEventListener('scroll', () => {
+    if (!queued) { queued = true; requestAnimationFrame(mark); }
+  }, { passive: true });
+  mark();
+</script>
+
 <style>
   .layout { display: grid; grid-template-columns: 15rem 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; margin-top: 16px; }
   .toc { position: sticky; top: 24px; font-size: 0.9375rem; }
   .toc ol { list-style: none; margin: 0; padding: 0; }
   .toc a { display: block; padding: 5px 0; text-decoration: none; color: var(--stone); }
   .toc a:hover { color: var(--shade); text-decoration: underline; }
+  .toc a[aria-current] {
+    color: var(--shade);
+    text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--orange);
+  }
 
   .doc { max-width: 38rem; font-size: 1.125rem; line-height: 1.65; }
   .doc :global(h2) {

@@ -14,6 +14,10 @@
   --wash: #f3f4f4;
   --orange: #e77500;
   --orange-light: #f28a1f;
+  --orange-wash: #f9d6b0; /* text selection */
+
+  /* Strong ease-out: movement starts at once, so a press feels answered. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   /* Libre Caslon: Caslon was the type of colonial American printing, the era Nassau Hall
      was built in. Display is for large sizes only (hero, page titles, article headings);
@@ -36,7 +40,15 @@ body {
   font-size: 1.125rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* Keeps the footer at the bottom of the window on short pages. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
 }
+main { flex: 1 0 auto; }
+
+::selection { background: var(--orange-wash); color: var(--shade); }
 
 img { display: block; max-width: 100%; }
 
@@ -44,8 +56,9 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
-h1, h2, h3 { margin: 0; font-weight: 400; line-height: 1.15; }
+h1, h2, h3 { margin: 0; font-weight: 400; line-height: 1.15; text-wrap: balance; }
 p { margin: 0 0 1em; }
+p, li, dd { text-wrap: pretty; } /* no one-word last lines */
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 
@@ -72,8 +85,17 @@ p { margin: 0 0 1em; }
   background: var(--orange);
   color: var(--shade);
   border: 1px solid var(--orange);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 160ms var(--ease-out);
 }
-.button:hover { background: var(--orange-light); border-color: var(--orange-light); }
+/* Touch screens keep :hover stuck on after a tap, so only pointers get it. */
+@media (hover: hover) and (pointer: fine) {
+  .button:hover { background: var(--orange-light); border-color: var(--orange-light); }
+}
+.button:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: background-color 150ms ease, border-color 150ms ease; }
+  .button:active { transform: none; }
+}
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

@@ -38,7 +38,9 @@ const path = Astro.url.pathname.replace(/\/$/, '');
   .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; }
   .brand { font-family: var(--display); font-size: 1.75rem; line-height: 1; text-decoration: none; }
   ul { list-style: none; margin: 0; padding: 0; display: flex; gap: clamp(16px, 3vw, 36px); }
-  nav a { text-decoration: none; font-size: 1.0625rem; }
+  nav a { position: relative; text-decoration: none; font-size: 1.0625rem; }
+  /* Widens the tap area to about 44px without changing the layout. */
+  nav a::before { content: ''; position: absolute; inset: -8px -8px; }
   nav a:hover, nav a[aria-current='page'] {
     text-decoration: underline; text-underline-offset: 0.4em;
     text-decoration-thickness: 2px; text-decoration-color: var(--orange);

@@ -18,7 +18,7 @@ export const site = {
   founded: 2026,
 
   // TODO: real mailing-list sign-up link (e.g. a Princeton listserv or Google Form).
-  // Until then, the petition form's mailing-list checkbox collects sign-ups.
+  // While it's null, buttons say "How to join" and go to the Join page instead.
   mailingListUrl: null as string | null,
 
   // TODO: club email. Leave as null to hide it.
@@ -33,20 +33,6 @@ export const site = {
 
   // Required by Constitution, Art. VIII §4.
   openToAll: 'Agora is open to all Princeton University students.',
-
-  // The recognition petition (SGRC needs at least 25 undergraduate signatures).
-  // While `active` is true, the home page button and the nav point to /petition.
-  // Set `active` to false once Agora is recognized.
-  petition: {
-    active: true,
-    goal: 25,
-    // Show the form inside the petition page. Keep false while the form is restricted to
-    // Princeton accounts: Google's sign-in can't run inside an embedded frame, so the
-    // buttons open the form directly instead.
-    embed: false,
-    // The Google Form people sign. Set to null to hide the form.
-    formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdEfR63jrVfEbhXzOg01wFwXvLS4FbrcEshNMy_utDFv7deMg/viewform' as string | null,
-  },
 };
 
 export const nav = [
@@ -54,5 +40,4 @@ export const nav = [
   { href: url('/readings'), label: 'Readings' },
   { href: url('/people'), label: 'People' },
   { href: url('/join'), label: 'Join' },
-  ...(site.petition.active ? [{ href: url('/petition'), label: 'Petition' }] : []),
 ];

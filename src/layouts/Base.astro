@@ -3,6 +3,9 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site, url } from '../site';
+// Same files the @fontsource CSS loads, so preloading them adds no download.
+import displayFont from '@fontsource/libre-caslon-display/files/libre-caslon-display-latin-400-normal.woff2?url';
+import textFont from '@fontsource/libre-caslon-text/files/libre-caslon-text-latin-400-normal.woff2?url';
 
 interface Props { title?: string; description?: string; overlayHeader?: boolean }
 const {
@@ -11,6 +14,8 @@ const {
   overlayHeader = false,
 } = Astro.props;
 const fullTitle = title ? `${title} | Agora` : `Agora, ${site.tagline}`;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const shareImage = new URL(url('/images/nassau-1200.jpg'), Astro.site).href;
 ---
 <!doctype html>
 <html lang="en" style={site.draft ? '--draft-h: 30px' : undefined}>
@@ -19,10 +24,24 @@ const fullTitle = title ? `${title} | Agora` : `Agora, ${site.tagline}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
+
+    <!-- Link previews in group chats and social apps -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Agora" />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(url('/images/nassau-1200.jpg'), Astro.site).href} />
-    <meta name="theme-color" content="#22282e" />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="674" />
+    <meta property="og:image:alt" content="Nassau Hall at dusk" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Browser bar: slate over the home photo, white over the white interior pages. -->
+    <meta name="theme-color" content={overlayHeader ? '#22282e' : '#ffffff'} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
   </head>
   <body>
